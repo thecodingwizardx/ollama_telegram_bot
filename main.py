@@ -3,6 +3,7 @@ import logging
 
 from aiogram import Bot, types
 
+import bot.handlers.bot_settings
 import bot.handlers.start  # noqa: F401
 import bot.handlers.text_input
 from bot.dispatcher import bot, dp  # Import bot and dp
