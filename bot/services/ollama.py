@@ -1,18 +1,17 @@
 import logging
 
-import ollama
 from aiogram.enums import ParseMode
 from aiogram.types import Message
 
 from bot.dispatcher import bot
-from config.config_loader import OLLAMA_DEFAULT_MODEL
+from config.config_loader import OLLAMA_DEFAULT_MODEL, client
 
 
 # Function to send a request to Ollama's API and stream the response to the user
 async def ollama_request(message: Message, prompt: str = None):
     try:
         # Start streaming the response from Ollama API
-        stream = ollama.chat(
+        stream = await client.chat(
             model=OLLAMA_DEFAULT_MODEL,
             messages=[{"role": "user", "content": prompt}],
             stream=True,
@@ -29,7 +28,7 @@ async def ollama_request(message: Message, prompt: str = None):
         previous_response = ""  # To keep track of the last message content
 
         # Stream chunks and update the same message with the full response
-        for chunk in stream:
+        async for chunk in stream:
             chunk_content = chunk["message"]["content"]
             full_response += chunk_content
 
