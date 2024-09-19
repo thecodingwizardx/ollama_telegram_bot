@@ -11,8 +11,11 @@ WORKDIR /app
 # Copy only the necessary files to install dependencies (pyproject.toml and poetry.lock)
 COPY pyproject.toml poetry.lock /app/
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry
+# Install Poetry using the installation script
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Ensure Poetry's path is added to the environment
+ENV PATH="/root/.local/bin:$PATH"
 
 # Install the dependencies using Poetry
 RUN poetry install --no-root --no-interaction --no-ansi
