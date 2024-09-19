@@ -3,9 +3,9 @@ import logging
 
 from aiogram import Bot, types
 
-import bot.handlers.start  # Importing the start handler  # noqa: F401
-from bot.dispatcher import dp
-from config.config_loader import TOKEN
+import bot.handlers.start  # noqa: F401
+import bot.handlers.text_input
+from bot.dispatcher import bot, dp  # Import bot and dp
 
 
 async def set_bot_commands(bot: Bot):
@@ -20,7 +20,6 @@ async def set_bot_commands(bot: Bot):
 
 
 async def main():
-    bot = Bot(token=TOKEN)
     await set_bot_commands(bot)
     await dp.start_polling(bot)
 
