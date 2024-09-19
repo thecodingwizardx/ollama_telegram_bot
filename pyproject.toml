@@ -11,6 +11,7 @@ aiogram = "^3.13.1"
 python-dotenv = "^1.0.1"
 PyYAML = "^6.0.2"
 aiohttp = "^3.10.5"
+ollama = "^0.3.3"
 
 
 [build-system]
