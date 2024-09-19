@@ -1,3 +1,4 @@
+from aiogram import types
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -6,6 +7,11 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.dispatcher import dp
 
 start_kb = InlineKeyboardBuilder()
+
+start_kb.row(
+    types.InlineKeyboardButton(text="ℹ️ About", callback_data="about"),
+    types.InlineKeyboardButton(text="⚙️ Settings", callback_data="settings"),
+)
 
 
 @dp.message(Command("start"))
