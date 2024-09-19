@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  ollama_telegram_bot:
+    container_name: ollama_telegram_bot
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: ollama_image
+    command: python main.py
