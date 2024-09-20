@@ -54,16 +54,19 @@ class BotDatabase:
         )
         return dialog_id
 
-    async def add_message_to_dialog(self, dialog_id, sender, message):
+    async def add_message_to_dialog(
+        self, user_id, dialog_id, user_message, bot_message
+    ):
         message_data = {
-            "sender": sender,  # "user" or "bot"
-            "message": message,
-            "date": datetime.now(),
+            "user": user_message,  # User's message
+            "bot": bot_message,  # Bot's message
+            "date": datetime.now(),  # Current timestamp
         }
 
-        # Add the message to the dialog's messages array
+        # Append the message to the dialog's messages array
         await self.dialogs_collection.update_one(
-            {"_id": dialog_id}, {"$push": {"messages": message_data}}
+            {"_id": dialog_id, "user_id": user_id},
+            {"$push": {"messages": message_data}},  # Use $push to append to the array
         )
 
     async def get_user(self, user_id):

@@ -16,8 +16,6 @@ async def ollama_request(db, dialog_id, message: Message, prompt: str = None):
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )
-        # Store user's message in the dialog
-        await db.add_message_to_dialog(dialog_id, sender="user", message=prompt)
         # Send an initial message to edit later
         sent_message = await bot.send_message(
             chat_id=message.chat.id,
@@ -42,10 +40,13 @@ async def ollama_request(db, dialog_id, message: Message, prompt: str = None):
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 previous_response = full_response
-                # Store bot's response in the dialog
+        # Store bot's response in the dialog
         await db.add_message_to_dialog(
-            dialog_id, sender="bot", message=full_response
-        )  # Update the previous response
+            user_id=message.from_user.id,
+            dialog_id=dialog_id,
+            user_message=prompt,
+            bot_message=full_response,
+        )
 
     except Exception as e:
         logging.error(f"-----\n[OllamaAPI-ERR] CAUGHT FAULT!\n{e}\n-----")
