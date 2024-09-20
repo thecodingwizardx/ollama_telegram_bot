@@ -1,11 +1,11 @@
 <div align="center">
   <h1>
-    <img src="https://ollama.com/public/ollama.png" width="80px"><br/>
+    <!-- Place your custom image in the assets folder and update the src attribute below -->
+    <img src="assets/bot_logo.png" width="80px"><br/>
     Ollama Telegram Bot
   </h1>
 </div>
 
----
 
 # 📖 Description
 
@@ -25,12 +25,12 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 The bot is currently in its early stages of development, with many more exciting features planned for the future. Here's what's on the roadmap:
 
 - [x] **Fully Dockerized Bot**: Easy deployment and management through Docker, ensuring seamless integration and scalability.
-- [ ] **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
+- [x] **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
+- [x] **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
 - [ ] **Model Usage Analytics**: Track usage statistics such as questions asked, response time, and tokens consumed.
 - [ ] **Inline Keyboard for Model Selection**: Easily choose models using interactive inline keyboard buttons within Telegram.
 - [ ] **Personalized Character**: Create your own custom personalized character (e.g., **MyGF, MyCodeAssistant**, etc.).
 - [ ] **Customizable Model System Prompts**: Personalize system prompts with custom messages for each model.
-- [ ] **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
 - [ ] **Download and Query Any Ollama Model**: Download any Ollama model locally and interact with it directly via the bot.
 - [ ] **Voice Input with Real-Time Response**: Ask questions using voice commands and get real-time streaming responses.
 - [ ] **Conversation History Management**: Store, manage, and search past conversations for easy reference and continuity.
