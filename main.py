@@ -42,7 +42,7 @@ async def main():
     # Text input handler (excluding commands)
     router.message.register(
         handle_text_input,
-        F.text & (lambda message: not message.is_command()),  # Exclude commands
+        F.text & ~F.is_command(),  # Use built-in filter to exclude commands
     )
 
     # Unexpected input handler (non-text messages)
@@ -57,5 +57,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        logging.error("Bot stopped!")
         logging.error("Bot stopped!")

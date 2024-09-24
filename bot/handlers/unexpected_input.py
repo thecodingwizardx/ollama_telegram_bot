@@ -1,10 +1,7 @@
-from aiogram import F, types
+from aiogram import types
 from aiogram.types import Message
 
-from bot.dispatcher import dp
 
-
-@dp.message(~F.text)
 async def handle_unexpected_input(message: Message):
     content_type = message.content_type
     user_first_name = message.from_user.first_name

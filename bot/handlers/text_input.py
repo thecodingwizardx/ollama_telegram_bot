@@ -1,19 +1,12 @@
-from aiogram import F
 from aiogram.types import Message
 
-from bot.dispatcher import dp
 from bot.services.ollama import ollama_request
 from database.bot_database import BotDatabase
 
 db = BotDatabase()
 
 
-@dp.message(F.text)
 async def handle_text_input(message: Message):
-    print(f"Text Handler: Received message: {message.text}")
-    print(f"Entities: {message.entities}")
-    print(message.chat.type)
-
     if message.chat.type == "private":
         # Capture the user's input message text as the prompt
         user = message.from_user

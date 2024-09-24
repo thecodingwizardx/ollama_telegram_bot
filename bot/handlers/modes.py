@@ -14,7 +14,6 @@ def get_mode_names():
 
 # Handler for the /mode command
 async def show_modes(message: types.Message, page: int = 0):
-    print("Command Handler: Received /mode command")
     mode_names = get_mode_names()
     per_page = 5  # Number of modes to show per page
 

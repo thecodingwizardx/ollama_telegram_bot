@@ -1,5 +1,4 @@
 import ollama
-from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -9,8 +8,6 @@ from bot.dispatcher import dp
 user_selected_model = {}
 
 
-# Handler for the /settings command
-@dp.message(Command("settings"))
 async def command_settings_handler(message: Message):
     """
     This handler sends a settings menu with inline keyboard buttons.
