@@ -1,3 +1,4 @@
+from aiogram import F
 from aiogram.types import Message
 
 from bot.dispatcher import dp
@@ -7,8 +8,10 @@ from database.bot_database import BotDatabase
 db = BotDatabase()
 
 
-@dp.message()
+@dp.message(F.text)
 async def handle_text_input(message: Message):
+    print(f"Text Handler: Received message: {message.text}")
+    print(f"Entities: {message.entities}")
     print(message.chat.type)
 
     if message.chat.type == "private":
