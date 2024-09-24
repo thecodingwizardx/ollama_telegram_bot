@@ -7,57 +7,72 @@ with open("config/chat_modes.yml", "r", encoding="utf-8") as file:
     chat_modes = yaml.safe_load(file)
 
 
-# Helper function to get the mode names
-def get_mode_names():
-    return [chat_modes[mode]["name"] for mode in chat_modes]
+# Helper function to get list of (key, name) tuples
+def get_modes():
+    return [(key, value["name"]) for key, value in chat_modes.items()]
 
 
-# Handler for the /mode command
-async def show_modes(message: types.Message, page: int = 0):
-    mode_names = get_mode_names()
-    per_page = 5  # Number of modes to show per page
-
-    # Create inline keyboard with modes
+# Function to create inline keyboard for a specific page
+def create_keyboard(page: int, per_page: int = 5):
+    modes = get_modes()
     keyboard_buttons = []
     start = page * per_page
     end = start + per_page
-    for mode_name in mode_names[start:end]:
+    for key, name in modes[start:end]:
+        # Use mode key in callback_data instead of display name
         keyboard_buttons.append(
-            [InlineKeyboardButton(text=mode_name, callback_data=f"mode:{mode_name}")]
+            [InlineKeyboardButton(text=name, callback_data=f"mode:{key}")]
         )
 
-    # Add navigation buttons
+    # Add navigation buttons if necessary
     navigation_buttons = []
     if page > 0:
         navigation_buttons.append(
             InlineKeyboardButton(text="⬅️ Back", callback_data=f"page:{page - 1}")
         )
-    if end < len(mode_names):
+    if end < len(modes):
         navigation_buttons.append(
             InlineKeyboardButton(text="➡️ Next", callback_data=f"page:{page + 1}")
         )
 
-    # If we have navigation buttons, add them as a separate row
+    # Add navigation buttons as a separate row if they exist
     if navigation_buttons:
         keyboard_buttons.append(navigation_buttons)
 
-    # Create the markup and assign buttons
+    # Create the InlineKeyboardMarkup object
     keyboard = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+    return keyboard
 
+
+async def show_modes(message: types.Message):
+    page = 0  # Start at the first page
+    keyboard = create_keyboard(page)
     await message.answer("Choose a mode:", reply_markup=keyboard)
 
 
-# Callback handler for pagination
 async def process_pagination(callback_query: types.CallbackQuery):
+    # Extract the page number from callback data
     page = int(callback_query.data.split(":")[1])
-    await show_modes(callback_query.message, page=page)
+    keyboard = create_keyboard(page)
+
+    # Edit the existing message's text and keyboard
+    await callback_query.message.edit_text("Choose a mode:", reply_markup=keyboard)
+
+    # Acknowledge the callback to remove the "loading" state
+    await callback_query.answer()
 
 
-# Callback handler for mode selection
 async def process_mode_selection(callback_query: types.CallbackQuery):
+    # Extract the mode key from callback data
     mode_key = callback_query.data.split(":")[1]
     mode_info = chat_modes.get(mode_key, {})
+
+    # Retrieve welcome message and parse mode, with defaults
     welcome_message = mode_info.get("welcome_message", "Welcome!")
     parse_mode = mode_info.get("parse_mode", "html")
 
+    # Send the welcome message
     await callback_query.message.answer(welcome_message, parse_mode=parse_mode)
+
+    # Acknowledge the callback to remove the "loading" state
+    await callback_query.answer()
