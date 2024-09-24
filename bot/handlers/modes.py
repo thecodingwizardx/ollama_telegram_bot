@@ -1,6 +1,12 @@
+# bot/handlers/modes.py
+
 import yaml
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from database.bot_database import BotDatabase
+
+db = BotDatabase()
 
 # Load chat modes from YAML with UTF-8 encoding
 with open("config/chat_modes.yml", "r", encoding="utf-8") as file:
@@ -66,6 +72,15 @@ async def process_mode_selection(callback_query: types.CallbackQuery):
     # Extract the mode key from callback data
     mode_key = callback_query.data.split(":")[1]
     mode_info = chat_modes.get(mode_key, {})
+
+    if not mode_info:
+        await callback_query.answer("Selected mode not found.", show_alert=True)
+        return
+
+    # Create a new dialog with the selected mode
+    user_id = callback_query.from_user.id
+    chat_mode = mode_key
+    dialog_id = await db.create_dialog(user_id, chat_mode=chat_mode)
 
     # Retrieve welcome message and parse mode, with defaults
     welcome_message = mode_info.get("welcome_message", "Welcome!")

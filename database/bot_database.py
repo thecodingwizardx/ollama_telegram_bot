@@ -1,3 +1,5 @@
+# database/bot_database.py
+
 import uuid
 from datetime import datetime
 
@@ -25,6 +27,7 @@ class BotDatabase:
             "last_interaction": datetime.now(),
             "first_seen": datetime.now(),
             "current_dialog_id": None,
+            # Removed 'selected_mode' field
         }
         existing_user = await self.users_collection.find_one({"_id": user_id})
         if existing_user:
@@ -36,17 +39,17 @@ class BotDatabase:
             # If the user does not exist, insert the new user document
             await self.users_collection.insert_one(user_data)
 
-    async def create_dialog(self, user_id, chat_mode="Assitant", model="test"):
-        dialog_id = str(uuid.uuid4())  # Use ObjectId for unique dialog_id
+    async def create_dialog(self, user_id, chat_mode="assistant", model="test"):
+        dialog_id = str(uuid.uuid4())  # Use UUID for unique dialog_id
         dialog_data = {
             "_id": dialog_id,
             "user_id": user_id,
-            "chat_mode": chat_mode,
+            "chat_mode": chat_mode,  # Set chat_mode
             "start_time": datetime.now(),
             "model": model,
             "messages": [],
         }
-        # Insert the dialog into the dialog collection
+        # Insert the dialog into the dialogs collection
         await self.dialogs_collection.insert_one(dialog_data)
 
         # Update the current dialog ID in the user's document
