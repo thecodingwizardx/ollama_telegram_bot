@@ -5,6 +5,7 @@ from aiogram import Bot, F, types
 from aiogram.filters import Command
 
 from bot.dispatcher import bot, dp, router
+from bot.handlers.bot_settings import command_settings_handler
 from bot.handlers.modes import process_mode_selection, process_pagination, show_modes
 from bot.handlers.start import command_start_handler
 from bot.handlers.text_input import handle_text_input
@@ -28,6 +29,7 @@ async def main():
     # Register command handlers
     router.message.register(command_start_handler, Command("start"))
     router.message.register(show_modes, Command("mode"))
+    router.message.register(command_settings_handler, Command("settings"))
 
     # Callback query handlers
     router.callback_query.register(
@@ -55,4 +57,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
+        logging.error("Bot stopped!")
         logging.error("Bot stopped!")
