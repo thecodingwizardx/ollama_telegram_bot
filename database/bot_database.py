@@ -36,11 +36,12 @@ class BotDatabase:
             # If the user does not exist, insert the new user document
             await self.users_collection.insert_one(user_data)
 
-    async def create_dialog(self, user_id, model="test"):
+    async def create_dialog(self, user_id, chat_mode="Assitant", model="test"):
         dialog_id = str(uuid.uuid4())  # Use ObjectId for unique dialog_id
         dialog_data = {
             "_id": dialog_id,
             "user_id": user_id,
+            "chat_mode": chat_mode,
             "start_time": datetime.now(),
             "model": model,
             "messages": [],
