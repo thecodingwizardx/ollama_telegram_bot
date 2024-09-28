@@ -9,7 +9,7 @@ from aiogram.exceptions import TelegramBadRequest, TelegramRetryAfter
 from aiogram.types import Message
 
 from bot.dispatcher import bot
-from config.config_loader import OLLAMA_DEFAULT_MODEL, client
+from config.config_loader import client
 
 
 # Function to send a request to Ollama's API and stream the response to the user
@@ -18,8 +18,10 @@ async def ollama_request(
 ):
     try:
         # Start streaming the response from Ollama API
+        # Fetch the selected model from the database
+        selected_model = await db.get_selected_model(message.from_user.id)
         stream = await client.chat(
-            model=OLLAMA_DEFAULT_MODEL,
+            model=selected_model,
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )

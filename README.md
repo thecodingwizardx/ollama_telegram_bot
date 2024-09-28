@@ -17,6 +17,7 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 
 - **Real-time Response Streaming**: The bot streams responses **sentence by sentence**, providing a conversational and dynamic user experience.
 - **Multiple Chat Modes**: Using `/mode`, You can choose any chat mode like Coding Assistant, Travel Guide, Movie expert, etc..
+- **Inline Keyboard for Model Selection**: Easily choose models using interactive inline keyboard buttons within Telegram.
 - **Fully Dockerized Bot**: Easy deployment and management through Docker, ensuring seamless integration and scalability.
 - **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
 - **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
@@ -36,7 +37,6 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 The bot is currently in its early stages of development, with many more exciting features planned for the future. Here's what's on the roadmap:
 
 - [ ] **Model Usage Analytics**: Track usage statistics such as questions asked, response time, and tokens consumed.
-- [ ] **Inline Keyboard for Model Selection**: Easily choose models using interactive inline keyboard buttons within Telegram.
 - [ ] **Personalized Character**: Create your own custom personalized character (e.g., **MyGF, MyCodeAssistant**, etc.).
 - [ ] **Customizable Model System Prompts**: Personalize system prompts with custom messages for each model.
 - [ ] **Download and Query Any Ollama Model**: Download any Ollama model locally and interact with it directly via the bot.

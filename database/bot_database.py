@@ -5,7 +5,7 @@ from datetime import datetime
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from config.config_loader import MONGO_URI
+from config.config_loader import MONGO_URI, OLLAMA_DEFAULT_MODEL
 
 
 class BotDatabase:
@@ -86,3 +86,12 @@ class BotDatabase:
         await self.users_collection.update_one(
             {"_id": user_id}, {"$set": {"last_interaction": datetime.now()}}
         )
+
+    async def update_user_model(self, user_id, selected_model):
+        await self.users_collection.update_one(
+            {"_id": user_id}, {"$set": {"selected_model": selected_model}}
+        )
+
+    async def get_selected_model(self, user_id):
+        user = await self.users_collection.find_one({"_id": user_id})
+        return user.get("selected_model", OLLAMA_DEFAULT_MODEL)

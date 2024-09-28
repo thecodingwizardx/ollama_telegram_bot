@@ -126,11 +126,10 @@ async def process_mode_selection(callback_query: types.CallbackQuery):
     # Create a new dialog with the selected mode
     user_id = callback_query.from_user.id
     chat_mode = mode_key
-    dialog_id = await db.create_dialog(user_id, chat_mode=chat_mode)
+    _ = await db.create_dialog(user_id, chat_mode=chat_mode)
 
     # Retrieve welcome message and parse mode, with defaults
     welcome_message = mode_info.get("welcome_message", "Welcome!")
-    parse_mode = mode_info.get("parse_mode", "html")
 
     # Send the welcome message
     await callback_query.message.answer(welcome_message, parse_mode=ParseMode.HTML)
