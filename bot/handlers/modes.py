@@ -1,5 +1,7 @@
 # bot/handlers/modes.py
 
+import asyncio  # Import asyncio for handling timeouts
+
 import yaml
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -50,10 +52,48 @@ def create_keyboard(page: int, per_page: int = 5):
     return keyboard
 
 
+# Dictionary to keep track of timeout tasks per message
+# Key: message_id, Value: asyncio.Task
+timeout_tasks = {}
+
+
 async def show_modes(message: types.Message):
     page = 0  # Start at the first page
     keyboard = create_keyboard(page)
-    await message.answer("Choose a mode:", reply_markup=keyboard)
+    sent_message = await message.answer(
+        "Select chat mode (15 modes available):", reply_markup=keyboard
+    )
+
+    # Start the timeout handler
+    start_timeout(sent_message)
+
+
+def start_timeout(sent_message: types.Message):
+    """Starts or restarts the timeout handler for a given message."""
+    message_id = sent_message.message_id
+
+    # If there's an existing timeout task for this message, cancel it
+    if message_id in timeout_tasks:
+        timeout_tasks[message_id].cancel()
+
+    # Define a coroutine to handle timeout
+    async def timeout_handler():
+        try:
+            await asyncio.sleep(10)  # Wait for 10 seconds
+            # Edit the message to inform about timeout and remove the keyboard
+            await sent_message.edit_text(
+                "Mode selection timed out. Please try again.", reply_markup=None
+            )
+        except asyncio.CancelledError:
+            # The timeout was reset/cancelled
+            pass
+        except Exception as e:
+            # Handle other exceptions (e.g., message already deleted)
+            print(f"Timeout handler error: {e}")
+
+    # Start the timeout_handler as a background task
+    task = asyncio.create_task(timeout_handler())
+    timeout_tasks[message_id] = task
 
 
 async def process_pagination(callback_query: types.CallbackQuery):
@@ -62,10 +102,15 @@ async def process_pagination(callback_query: types.CallbackQuery):
     keyboard = create_keyboard(page)
 
     # Edit the existing message's text and keyboard
-    await callback_query.message.edit_text("Choose a mode:", reply_markup=keyboard)
+    await callback_query.message.edit_text(
+        "Select chat mode (15 modes available):", reply_markup=keyboard
+    )
 
     # Acknowledge the callback to remove the "loading" state
     await callback_query.answer()
+
+    # Restart the timeout handler
+    start_timeout(callback_query.message)
 
 
 async def process_mode_selection(callback_query: types.CallbackQuery):
@@ -89,5 +134,20 @@ async def process_mode_selection(callback_query: types.CallbackQuery):
     # Send the welcome message
     await callback_query.message.answer(welcome_message, parse_mode=parse_mode)
 
+    # Remove the inline keyboard and inform the user
+    try:
+        await callback_query.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass  # The message might have been edited already
+
+    # Optionally, inform the user that the mode has been selected
+    await callback_query.message.answer("Mode selected successfully.")
+
     # Acknowledge the callback to remove the "loading" state
     await callback_query.answer()
+
+    # Cancel any existing timeout task for this message
+    message_id = callback_query.message.message_id
+    if message_id in timeout_tasks:
+        timeout_tasks[message_id].cancel()
+        del timeout_tasks[message_id]
