@@ -4,6 +4,7 @@ import asyncio
 import logging
 import time
 
+from aiogram.enums.parse_mode import ParseMode
 from aiogram.exceptions import TelegramBadRequest, TelegramRetryAfter
 from aiogram.types import Message
 
@@ -13,7 +14,7 @@ from config.config_loader import OLLAMA_DEFAULT_MODEL, client
 
 # Function to send a request to Ollama's API and stream the response to the user
 async def ollama_request(
-    db, dialog_id, message: Message, prompt: str = None, parse_mode: str = "html"
+    db, parse_mode, dialog_id, message: Message, prompt: str = None
 ):
     try:
         # Start streaming the response from Ollama API
@@ -27,7 +28,7 @@ async def ollama_request(
         sent_message = await bot.send_message(
             chat_id=message.chat.id,
             text="Processing...",
-            parse_mode=parse_mode.upper(),  # Ensure parse_mode is uppercase as required by Aiogram
+            parse_mode=ParseMode.HTML,  # Ensure parse_mode is uppercase as required by Aiogram
         )
 
         full_response = ""  # To accumulate the streamed content
@@ -54,7 +55,7 @@ async def ollama_request(
                         chat_id=message.chat.id,
                         message_id=sent_message.message_id,
                         text=full_response,
-                        parse_mode=parse_mode.upper(),
+                        parse_mode=ParseMode.HTML,
                     )
                     last_edit_time = current_time
                     buffer_count = 0  # Reset buffer count after successful edit
@@ -78,7 +79,7 @@ async def ollama_request(
                     chat_id=message.chat.id,
                     message_id=sent_message.message_id,
                     text=full_response,
-                    parse_mode=parse_mode.upper(),
+                    parse_mode=parse_mode,
                 )
             except TelegramRetryAfter as e:
                 wait_time = e.retry_after
@@ -90,7 +91,7 @@ async def ollama_request(
                     chat_id=message.chat.id,
                     message_id=sent_message.message_id,
                     text=full_response,
-                    parse_mode=parse_mode.upper(),
+                    parse_mode=parse_mode,
                 )
             except TelegramBadRequest as e:
                 if "message is not modified" in str(e):
@@ -118,7 +119,7 @@ async def ollama_request(
             await bot.send_message(
                 chat_id=message.chat.id,
                 text="Something went wrong while processing your request.",
-                parse_mode=parse_mode.upper(),
+                parse_mode=parse_mode,
             )
         except Exception as inner_e:
             logging.error(f"Failed to send error message after rate limit: {inner_e}")
@@ -129,7 +130,7 @@ async def ollama_request(
             await bot.send_message(
                 chat_id=message.chat.id,
                 text="Something went wrong while processing your request.",
-                parse_mode=parse_mode.upper(),
+                parse_mode=parse_mode,
             )
         except TelegramRetryAfter as e:
             wait_time = e.retry_after
@@ -140,7 +141,7 @@ async def ollama_request(
             await bot.send_message(
                 chat_id=message.chat.id,
                 text="Something went wrong while processing your request.",
-                parse_mode=parse_mode.upper(),
+                parse_mode=parse_mode,
             )
         except TelegramBadRequest as e:
             logging.error(f"TelegramBadRequest Error while sending error message: {e}")

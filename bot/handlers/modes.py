@@ -4,6 +4,7 @@ import asyncio  # Import asyncio for handling timeouts
 
 import yaml
 from aiogram import types
+from aiogram.enums.parse_mode import ParseMode
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from database.bot_database import BotDatabase
@@ -132,7 +133,7 @@ async def process_mode_selection(callback_query: types.CallbackQuery):
     parse_mode = mode_info.get("parse_mode", "html")
 
     # Send the welcome message
-    await callback_query.message.answer(welcome_message, parse_mode=parse_mode)
+    await callback_query.message.answer(welcome_message, parse_mode=ParseMode.HTML)
 
     # Remove the inline keyboard and inform the user
     try:

@@ -1,6 +1,7 @@
 # bot/handlers/text_input.py
 
 import yaml
+from aiogram.enums.parse_mode import ParseMode
 from aiogram.types import Message
 
 from bot.services.ollama import ollama_request
@@ -36,7 +37,7 @@ async def handle_text_input(message: Message):
             mode_info = chat_modes.get(chat_mode, {})
             welcome_message = mode_info.get("welcome_message", "Welcome!")
             parse_mode = mode_info.get("parse_mode", "html")
-            await message.answer(welcome_message, parse_mode=parse_mode)
+            await message.answer(welcome_message, parse_mode=ParseMode.HTML)
         else:
             # Retrieve the current dialog
             dialog = await db.get_dialog(dialog_id)
@@ -47,7 +48,7 @@ async def handle_text_input(message: Message):
                 mode_info = chat_modes.get(chat_mode, {})
                 welcome_message = mode_info.get("welcome_message", "Welcome!")
                 parse_mode = mode_info.get("parse_mode", "html")
-                await message.answer(welcome_message, parse_mode=parse_mode)
+                await message.answer(welcome_message, parse_mode=ParseMode.HTML)
             else:
                 chat_mode = dialog.get("chat_mode", "assistant")
                 mode_info = chat_modes.get(chat_mode, {})
@@ -57,15 +58,18 @@ async def handle_text_input(message: Message):
         mode_info = chat_modes.get(chat_mode, {})
         prompt_start = mode_info.get("prompt_start", "")
         parse_mode = mode_info.get("parse_mode", "html")
-
+        if parse_mode == "markdown":
+            parse_mode = ParseMode.MARKDOWN
+        else:
+            parse_mode = ParseMode.HTML
         # Combine prompt_start with user input
         combined_prompt = f"{prompt_start}\n\nUser: {message.text}"
 
         # Call the ollama_request function with the combined prompt
         await ollama_request(
             db,
+            parse_mode,
             dialog_id,
             message=message,
             prompt=combined_prompt,
-            parse_mode=parse_mode,
         )
