@@ -21,6 +21,15 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 - **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
 ---
 
+# 🎥 Demo
+
+<p align="center">
+  <video width="320" height="240" controls>
+    <source src="assets/bot_demo.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
 # 🛠️ Planned Features
 
 The bot is currently in its early stages of development, with many more exciting features planned for the future. Here's what's on the roadmap:
@@ -110,6 +119,7 @@ We encourage you to get involved and help shape the future of this project!
 
 - [Ollama](https://github.com/jmorganca/ollama)
 - [Aiogram 3.x](https://github.com/aiogram/aiogram)
+- [chatgpt-telegram-bot](https://github.com/father-bot/chatgpt_telegram_bot) - *Inspired by Karfly's work on this project*
 - [ruecat/ollama-telegram](https://github.com/ruecat/ollama-telegram)
 
 ---
