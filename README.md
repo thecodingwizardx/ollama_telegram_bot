@@ -24,10 +24,11 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 # 🎥 Demo
 
 <p align="center">
-  <video width="320" height="240" controls>
-    <source src="assets/bot_demo.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <center>
+    <!-- Place your custom image in the assets folder and update the src attribute below -->
+    <img src="assets/bot_demo.gif""> <br/>
+    Ollama Telegram Bot
+  </center>
 </p>
 
 # 🛠️ Planned Features
