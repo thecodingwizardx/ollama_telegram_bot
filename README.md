@@ -16,17 +16,15 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 # 🚀 Features
 
 - **Real-time Response Streaming**: The bot streams responses **sentence by sentence**, providing a conversational and dynamic user experience.
-- **No Rate Limits**: The response streaming is designed to work without any rate-limiting restrictions, ensuring smooth and continuous interactions.
-
+- **Fully Dockerized Bot**: Easy deployment and management through Docker, ensuring seamless integration and scalability.
+- **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
+- **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
 ---
 
 # 🛠️ Planned Features
 
 The bot is currently in its early stages of development, with many more exciting features planned for the future. Here's what's on the roadmap:
 
-- [x] **Fully Dockerized Bot**: Easy deployment and management through Docker, ensuring seamless integration and scalability.
-- [x] **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
-- [x] **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
 - [ ] **Model Usage Analytics**: Track usage statistics such as questions asked, response time, and tokens consumed.
 - [ ] **Inline Keyboard for Model Selection**: Easily choose models using interactive inline keyboard buttons within Telegram.
 - [ ] **Personalized Character**: Create your own custom personalized character (e.g., **MyGF, MyCodeAssistant**, etc.).
@@ -50,6 +48,17 @@ This project is built using the following technologies:
 ---
 
 # 🛠️ Installation
+
+Before installation, make sure to set the necessary environment variables:
+
+| **Step**                        | **Description**                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------------- |
+| Rename `.env.example` to `.env` | Rename the `.env.example` file to `.env`.                                        |
+| Set `BOT_TOKEN`                 | Replace `#Your BOT TOKEN without Double Quotes` with your actual bot token.      |
+| Set `MONGO_URI`                 | Replace `#Your Mongo DB URI (Required Compulsory)` with your actual MongoDB URI. |
+| Set `OLLAMA_BASE_URL`           | Set `OLLAMA_BASE_URL` to `localhost` or any custom IP/Domain.                    |
+| Set `OLLAMA_DEFAULT_MODEL`      | Set `OLLAMA_DEFAULT_MODEL` to your default model, e.g., `dolphin-mistral`.       |
+| Set `OLLAMA_CUSTOM_PORT`        | Set `OLLAMA_CUSTOM_PORT` to `11434` (default port).                              |
 
 ## Manual Method (Linux only)
 
