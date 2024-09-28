@@ -20,6 +20,9 @@ async def set_bot_commands(bot: Bot):
         types.BotCommand(command="start", description="Start"),
         types.BotCommand(command="help", description="Show available commands"),
         types.BotCommand(command="mode", description="Choose a chatbot mode"),
+        types.BotCommand(
+            command="settings", description="Change AI Model and BOT language"
+        ),
     ]
     await bot.set_my_commands(commands)
 
