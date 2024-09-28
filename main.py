@@ -18,7 +18,6 @@ from bot.handlers.unexpected_input import handle_unexpected_input
 async def set_bot_commands(bot: Bot):
     commands = [
         types.BotCommand(command="start", description="Start"),
-        types.BotCommand(command="help", description="Show available commands"),
         types.BotCommand(command="mode", description="Choose a chatbot mode"),
         types.BotCommand(
             command="settings", description="Change AI Model and BOT language"
