@@ -140,9 +140,6 @@ async def process_mode_selection(callback_query: types.CallbackQuery):
     except Exception:
         pass  # The message might have been edited already
 
-    # Optionally, inform the user that the mode has been selected
-    await callback_query.message.answer("Mode selected successfully.")
-
     # Acknowledge the callback to remove the "loading" state
     await callback_query.answer()
 
