@@ -16,6 +16,7 @@ Chat with large language models (LLMs) right from your phone using this **amazin
 # 🚀 Features
 
 - **Real-time Response Streaming**: The bot streams responses **sentence by sentence**, providing a conversational and dynamic user experience.
+- **Multiple Chat Modes**: Using `/mode`, You can choose any chat mode like Coding Assistant, Travel Guide, Movie expert, etc..
 - **Fully Dockerized Bot**: Easy deployment and management through Docker, ensuring seamless integration and scalability.
 - **Asynchronous Messaging**: Support asynchronous interactions for a smoother user experience.
 - **Log Management in MongoDB**: Efficient log management, including storing queries and model responses in MongoDB.
