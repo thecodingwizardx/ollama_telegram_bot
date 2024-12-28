@@ -62,14 +62,32 @@ async def handle_text_input(message: Message):
             parse_mode = ParseMode.MARKDOWN
         else:
             parse_mode = ParseMode.HTML
-        # Combine prompt_start with user input
-        combined_prompt = f"{prompt_start}\n\nUser: {message.text}"
 
-        # Call the ollama_request function with the combined prompt
+        # Fetch the last two full user-bot messages from the dialog
+        last_two_full_messages = await db.get_last_two_full_messages(dialog_id)
+
+        # Construct the chat history for the prompt
+        chat_history = "\n".join(
+            [
+                f"User: {msg['user']}\nBot: {msg['bot']}"
+                for msg in last_two_full_messages
+            ]
+        )
+        combined_prompt = f"{prompt_start}\n\n{chat_history}\nUser: {message.text}"
+
+        # Call the Ollama API with the combined prompt
         await ollama_request(
             db,
             parse_mode,
             dialog_id,
             message=message,
             prompt=combined_prompt,
+        )
+
+        # Add the new user message as incomplete (bot response will update it later)
+        await db.add_message_to_dialog(
+            user_id=user.id,
+            dialog_id=dialog_id,
+            user_message=message.text,
+            bot_message=None,  # Placeholder, assuming bot's response is handled in ollama_request
         )

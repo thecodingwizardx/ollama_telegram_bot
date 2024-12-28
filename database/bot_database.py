@@ -61,16 +61,20 @@ class BotDatabase:
     async def add_message_to_dialog(
         self, user_id, dialog_id, user_message, bot_message
     ):
+        if user_message is None or bot_message is None:
+            # Avoid saving incomplete conversations
+            return
+
         message_data = {
-            "user": user_message,  # User's message
-            "bot": bot_message,  # Bot's message
-            "date": datetime.now(),  # Current timestamp
+            "user": user_message,
+            "bot": bot_message,
+            "date": datetime.now(),
         }
 
-        # Append the message to the dialog's messages array
+        # Append the new message to the dialog's messages array
         await self.dialogs_collection.update_one(
             {"_id": dialog_id, "user_id": user_id},
-            {"$push": {"messages": message_data}},  # Use $push to append to the array
+            {"$push": {"messages": message_data}},
         )
 
     async def get_user(self, user_id):
@@ -95,3 +99,20 @@ class BotDatabase:
     async def get_selected_model(self, user_id):
         user = await self.users_collection.find_one({"_id": user_id})
         return user.get("selected_model", OLLAMA_DEFAULT_MODEL)
+
+    async def get_last_two_full_messages(self, dialog_id):
+        dialog = await self.dialogs_collection.find_one(
+            {"_id": dialog_id}, {"messages": 1}
+        )
+        if not dialog or not dialog.get("messages"):
+            return []
+
+        # Filter messages to include only complete user-bot pairs
+        full_messages = [
+            message
+            for message in dialog["messages"]
+            if message.get("user") and message.get("bot")
+        ]
+
+        # Return the last two complete user-bot messages
+        return full_messages[-2:]
