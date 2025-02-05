@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  ollama_telegram_bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHONPATH=/app
+    env_file:
+      - config/.env
+    volumes:
+      - .:/app
